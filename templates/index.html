@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculate-X — Solve for the missing variable</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="card">
+    <h1>Calculate&#8209;X</h1>
+    <p class="tagline">Type an equation with one unknown and I'll find it.</p>
+
+    <form id="solver-form" autocomplete="off">
+      <label class="field">
+        <span>Equation</span>
+        <input
+          id="equation"
+          name="equation"
+          type="text"
+          placeholder="10 + x = 15"
+          aria-label="Equation"
+          required
+        />
+      </label>
+
+      <label class="field optional">
+        <span>Solve for <em>(optional)</em></span>
+        <input
+          id="variable"
+          name="variable"
+          type="text"
+          placeholder="auto-detect"
+          aria-label="Variable to solve for"
+          maxlength="20"
+        />
+      </label>
+
+      <button type="submit">Calculate</button>
+    </form>
+
+    <div id="result" class="result hidden" role="status" aria-live="polite"></div>
+
+    <section class="examples">
+      <span>Try:</span>
+      <button class="chip" type="button">10 + x = 15</button>
+      <button class="chip" type="button">2x + 3 = 11</button>
+      <button class="chip" type="button">x^2 = 16</button>
+      <button class="chip" type="button">(y - 4) / 2 = 5</button>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
