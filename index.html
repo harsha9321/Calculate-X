@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculate-X — Solve for the missing variable</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="static/style.css" />
 </head>
 <body>
   <main class="card">
@@ -48,8 +48,13 @@
       <button class="chip" type="button">x^2 = 16</button>
       <button class="chip" type="button">(y - 4) / 2 = 5</button>
     </section>
+
+    <p class="footnote">Runs entirely in your browser — no server required.</p>
   </main>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <!-- All client-side: nerdamer does the symbolic math, then our solver + UI. -->
+  <script src="static/vendor/nerdamer.all.min.js"></script>
+  <script src="static/solver.js"></script>
+  <script src="static/app.js"></script>
 </body>
 </html>
