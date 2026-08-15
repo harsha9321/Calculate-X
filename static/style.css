@@ -154,6 +154,142 @@ button[type="submit"]:hover {
   border-color: var(--accent);
 }
 
+.history {
+  margin-top: 1.75rem;
+  border-top: 1px solid #334155;
+  padding-top: 1.25rem;
+}
+
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.history-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.clear-btn {
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid #334155;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.clear-btn:hover:not(:disabled) {
+  color: var(--err);
+  border-color: var(--err);
+}
+
+.clear-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.history-empty {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.history-empty.hidden {
+  display: none;
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-left-width: 3px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.history-item.ok {
+  border-left-color: var(--ok);
+}
+
+.history-item.err {
+  border-left-color: var(--err);
+}
+
+.history-recall {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+}
+
+.history-recall:hover {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.history-eq {
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-res {
+  font-size: 0.85rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item.ok .history-res {
+  color: var(--ok);
+}
+
+.history-item.err .history-res {
+  color: var(--err);
+}
+
+.history-time {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 0.6rem 0.7rem 0 0;
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
 .footnote {
   margin: 1.5rem 0 0;
   text-align: center;
