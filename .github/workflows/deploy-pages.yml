@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+# Deploys the static Calculate-X site from this branch so it can be tested live.
+on:
+  push:
+    branches: [claude/formula-solver-app-owopqj]
+  workflow_dispatch:
+
+# Least-privilege token permissions needed to publish to Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one Pages deployment at a time; newer pushes supersede in-flight ones.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        # Reads the Pages config. Pages must be enabled once in repo settings
+        # (Settings -> Pages -> Source: "GitHub Actions"); the integration token
+        # isn't allowed to enable it automatically.
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # The whole repo is the site; index.html lives at the root.
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
