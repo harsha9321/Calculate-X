@@ -228,6 +228,11 @@ button[type="submit"]:hover {
   border-left-width: 3px;
   border-radius: 10px;
   overflow: hidden;
+  /* Keep each record at its natural height. Without this, flex items in the
+     scrollable column shrink to fit once the list gets long, making older
+     records progressively smaller and harder to read; instead the list
+     should scroll. */
+  flex-shrink: 0;
 }
 
 .history-item.ok {
