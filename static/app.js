@@ -18,8 +18,10 @@ function solve() {
   const equation = equationInput.value.trim();
   if (!equation) return;
 
+  const variable = variableInput.value.trim();
+
   try {
-    const data = solveEquation(equation, variableInput.value);
+    const data = solveEquation(equation, variable);
 
     if (data.solutions && data.solutions.length) {
       const answers = data.solutions
@@ -31,13 +33,29 @@ function solve() {
     } else {
       showResult("No result.", "err");
     }
+
+    FormulaHistory.record({
+      equation,
+      variable,
+      solutions: data.solutions,
+      message: data.message,
+    });
   } catch (err) {
     const message =
       err && err.name === "SolveError"
         ? err.message
         : "Something went wrong solving that equation.";
     showResult(escapeHtml(message), "err");
+    FormulaHistory.record({ equation, variable, error: message });
   }
+}
+
+// Clicking a past entry reloads it into the form and re-solves it.
+function recall(entry) {
+  equationInput.value = entry.equation;
+  variableInput.value = entry.variable || "";
+  solve();
+  equationInput.focus();
 }
 
 form.addEventListener("submit", (event) => {
@@ -52,3 +70,5 @@ document.querySelectorAll(".chip").forEach((chip) => {
     solve();
   });
 });
+
+FormulaHistory.init({ onRecall: recall });

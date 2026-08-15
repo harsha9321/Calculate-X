@@ -49,12 +49,27 @@
       <button class="chip" type="button">(y - 4) / 2 = 5</button>
     </section>
 
+    <section class="history" aria-label="Solve history">
+      <div class="history-head">
+        <h2>History</h2>
+        <button id="history-clear" type="button" class="clear-btn" disabled>
+          Clear
+        </button>
+      </div>
+      <p id="history-empty" class="history-empty">
+        Your solved equations appear here. History lives only in this tab and
+        clears when you refresh.
+      </p>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+
     <p class="footnote">Runs entirely in your browser — no server required.</p>
   </main>
 
   <!-- All client-side: nerdamer does the symbolic math, then our solver + UI. -->
   <script src="static/vendor/nerdamer.all.min.js"></script>
   <script src="static/solver.js"></script>
+  <script src="static/history.js"></script>
   <script src="static/app.js"></script>
 </body>
 </html>
