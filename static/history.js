@@ -94,7 +94,9 @@
   function record(entry) {
     if (!entry || !entry.equation) return;
     entries.push({
-      equation: entry.equation,
+      equation: entry.equation, // display string (may combine two equations)
+      eq1: entry.eq1 || entry.equation, // for recall
+      eq2: entry.eq2 || "",
       variable: entry.variable || "",
       solutions: entry.solutions || [],
       message: entry.message || null,

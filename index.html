@@ -9,7 +9,10 @@
 <body>
   <main class="card">
     <h1>Calculate&#8209;X</h1>
-    <p class="tagline">Type an equation with one unknown and I'll find it.</p>
+    <p class="tagline">
+      Type an equation with one unknown and I'll find it. Add a second
+      equation to solve for two variables.
+    </p>
 
     <form id="solver-form" autocomplete="off">
       <label class="field">
@@ -21,6 +24,17 @@
           placeholder="10 + x = 15"
           aria-label="Equation"
           required
+        />
+      </label>
+
+      <label class="field optional">
+        <span>Equation 2 <em>(optional — for two variables)</em></span>
+        <input
+          id="equation2"
+          name="equation2"
+          type="text"
+          placeholder="x - y = 2"
+          aria-label="Second equation"
         />
       </label>
 
@@ -44,9 +58,16 @@
     <section class="examples">
       <span>Try:</span>
       <button class="chip" type="button">10 + x = 15</button>
-      <button class="chip" type="button">2x + 3 = 11</button>
       <button class="chip" type="button">x^2 = 16</button>
       <button class="chip" type="button">(y - 4) / 2 = 5</button>
+      <button
+        class="chip"
+        type="button"
+        data-eq1="x + y = 10"
+        data-eq2="x - y = 2"
+      >
+        x + y = 10, x &minus; y = 2
+      </button>
     </section>
 
     <section class="history" aria-label="Solve history">

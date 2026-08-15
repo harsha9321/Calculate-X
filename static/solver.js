@@ -143,7 +143,8 @@
       throw new SolveError(
         "Found multiple variables (" +
           symbols.join(", ") +
-          "). Tell me which one to solve for."
+          "). Enter which one to solve for, or add a second equation to " +
+          "solve the system."
       );
     }
 
@@ -176,6 +177,83 @@
     };
   }
 
+  /**
+   * Solve a system of equations for its unknowns.
+   *
+   * @param {string[]} equations  e.g. ["x + y = 10", "x - y = 2"]. Blank
+   *                              entries are ignored; at least two real
+   *                              equations are required.
+   * @returns {{equations:string[], solutions:string[], message:?string}}
+   */
+  function solveSystem(equations) {
+    var cleaned = [];
+    for (var i = 0; i < equations.length; i++) {
+      var eq = (equations[i] || "").trim();
+      if (eq === "") continue;
+      if (eq.indexOf("=") === -1) {
+        throw new SolveError(
+          "Each equation must contain an '=' sign, e.g. x + y = 10."
+        );
+      }
+      if ((eq.match(/=/g) || []).length > 1) {
+        throw new SolveError("Each equation should contain exactly one '=' sign.");
+      }
+      cleaned.push(eq);
+    }
+
+    if (cleaned.length < 2) {
+      throw new SolveError(
+        "Enter a second equation to solve a system, or clear it to solve a " +
+          "single equation."
+      );
+    }
+
+    var result;
+    try {
+      result = nerdamer.solveEquations(cleaned);
+    } catch (e) {
+      var msg = e && e.message ? e.message : "";
+      if (/distinct solution/i.test(msg)) {
+        return {
+          equations: cleaned,
+          solutions: [],
+          message:
+            "This system has no single solution — the equations are either " +
+            "inconsistent or not independent.",
+        };
+      }
+      throw new SolveError("I couldn't solve that system of equations.");
+    }
+
+    // nerdamer returns [[name, value], ...]; normalise a lone [name, value].
+    var pairs = result;
+    if (result && result.length && !Array.isArray(result[0])) {
+      pairs = [result];
+    }
+
+    var solutions = (pairs || [])
+      .map(function (pair) {
+        return { name: String(pair[0]), value: pair[1] };
+      })
+      .sort(function (a, b) {
+        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+      })
+      .map(function (p) {
+        return p.name + " = " + formatSolution(p.value);
+      });
+
+    if (solutions.length === 0) {
+      return {
+        equations: cleaned,
+        solutions: [],
+        message: "No solution found for that system.",
+      };
+    }
+
+    return { equations: cleaned, solutions: solutions, message: null };
+  }
+
   global.SolveError = SolveError;
   global.solveEquation = solveEquation;
+  global.solveSystem = solveSystem;
 })(typeof window !== "undefined" ? window : this);
