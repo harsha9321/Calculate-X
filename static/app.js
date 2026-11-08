@@ -1,5 +1,6 @@
 const form = document.getElementById("solver-form");
 const equationInput = document.getElementById("equation");
+const equation2Input = document.getElementById("equation2");
 const variableInput = document.getElementById("variable");
 const resultBox = document.getElementById("result");
 
@@ -15,13 +16,20 @@ function escapeHtml(text) {
 }
 
 function solve() {
-  const equation = equationInput.value.trim();
-  if (!equation) return;
+  const eq1 = equationInput.value.trim();
+  if (!eq1) return;
 
+  const eq2 = equation2Input.value.trim();
   const variable = variableInput.value.trim();
 
+  // A second equation means "solve the system"; the "solve for" field only
+  // applies to a single equation (picking which variable to isolate).
+  const displayEquation = eq2 ? `${eq1};  ${eq2}` : eq1;
+
   try {
-    const data = solveEquation(equation, variable);
+    const data = eq2
+      ? solveSystem([eq1, eq2])
+      : solveEquation(eq1, variable);
 
     if (data.solutions && data.solutions.length) {
       const answers = data.solutions
@@ -35,7 +43,9 @@ function solve() {
     }
 
     FormulaHistory.record({
-      equation,
+      equation: displayEquation,
+      eq1,
+      eq2,
       variable,
       solutions: data.solutions,
       message: data.message,
@@ -46,13 +56,14 @@ function solve() {
         ? err.message
         : "Something went wrong solving that equation.";
     showResult(escapeHtml(message), "err");
-    FormulaHistory.record({ equation, variable, error: message });
+    FormulaHistory.record({ equation: displayEquation, eq1, eq2, variable, error: message });
   }
 }
 
-// Clicking a past entry reloads it into the form and re-solves it.
+// Clicking a past entry reloads it (both equations) into the form and re-solves.
 function recall(entry) {
-  equationInput.value = entry.equation;
+  equationInput.value = entry.eq1 || entry.equation || "";
+  equation2Input.value = entry.eq2 || "";
   variableInput.value = entry.variable || "";
   solve();
   equationInput.focus();
@@ -65,7 +76,10 @@ form.addEventListener("submit", (event) => {
 
 document.querySelectorAll(".chip").forEach((chip) => {
   chip.addEventListener("click", () => {
-    equationInput.value = chip.textContent;
+    // System chips carry both equations in data attributes; plain chips use
+    // their text as the single equation.
+    equationInput.value = chip.dataset.eq1 || chip.textContent.trim();
+    equation2Input.value = chip.dataset.eq2 || "";
     variableInput.value = "";
     solve();
   });
